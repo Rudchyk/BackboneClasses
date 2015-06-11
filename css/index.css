@@ -101,12 +101,12 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
 }
 
-.has-ps-left-icon, .has-ps-right-icon, .has-ps-top-icon, .has-ps-bottom-icon, .has-ps-center-icon, body, .section-area .area, .field-box, .checkbox-box,
+.has-ps-left-icon, .has-ps-right-icon, .has-ps-top-icon, .has-ps-bottom-icon, .has-ps-center-icon, body, .section-form .area, .field-box, .checkbox-box,
 .radio-box {
   position: relative;
 }
 
-.has-ps-left-icon:before, .has-ps-right-icon:before, .has-ps-top-icon:before, .has-ps-bottom-icon:before, .has-ps-center-icon:before, .aborted, .ceiling-pos, .left-pos, .right-pos, .field-helper, .top-pos, .bottom-pos, .center-pos, .btn-panel, .checkbox,
+.has-ps-left-icon:before, .has-ps-right-icon:before, .has-ps-top-icon:before, .has-ps-bottom-icon:before, .has-ps-center-icon:before, .aborted, .ceiling-pos, .left-pos, .right-pos, .field-helper, .top-pos, .bottom-pos, .center-pos, .button-panel, .checkbox,
 .radio {
   position: absolute;
 }
@@ -152,7 +152,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: all 0.25s ease;
 }
 
-input[type="submit"], button, label[for], .checkbox-box,
+input[type="submit"], button, label[for], .stylesheet_language-val, .stylesheet_language-radio, .checkbox-box,
 .radio-box, .file, .btn, .text button,
 .text input[type="submit"], .link-fake {
   cursor: pointer;
@@ -168,7 +168,7 @@ input[type="submit"], button, label[for], .checkbox-box,
   word-wrap: break-word;
 }
 
-.btn-panel, .title, .has-disabled .field, .field[disabled], .checkbox-box,
+.button-panel, .title, .has-disabled .field, .field[disabled], .checkbox-box,
 .radio-box, .btn.disabled, .text button.disabled,
 .text input.disabled[type="submit"], .btn[disabled], .text button[disabled],
 .text input[disabled][type="submit"] {
@@ -190,7 +190,7 @@ input[type="submit"], button, label[for], .checkbox-box,
   display: table-cell;
 }
 
-.left, .alignleft {
+.left, .stylesheet_language-item, .alignleft {
   float: left;
 }
 
@@ -202,13 +202,13 @@ input[type="submit"], button, label[for], .checkbox-box,
   clear: both;
 }
 
-.clearfix:after, .text:after {
+.clearfix:after, .stylesheet_language-list:after, .text:after {
   clear: both;
   display: table;
   content: "";
 }
 
-.full-width, .table, .full-size, .section-area .area, .field-hidden, .field-label-bl, .window, .wrapper, .field-box .field, .field.field-full, .btn-bl {
+.full-width, .table, .full-size, .section-form .area, .field-hidden, .field-label-bl, .window, .wrapper, .field-box .field, .field.field-full, .btn-bl {
   width: 100%;
 }
 
@@ -216,7 +216,7 @@ input[type="submit"], button, label[for], .checkbox-box,
   width: 50%;
 }
 
-.full-height, html, .full-size, .section-area .area, .field-hidden, .field-label-bl, .va_outer:before {
+.full-height, html, .full-size, .section-form .area, .field-hidden, .field-label-bl, .va_outer:before {
   height: 100%;
 }
 
@@ -327,25 +327,41 @@ body {
   padding: 50px;
 }
 
-.section-area {
+.section-form {
   padding-top: 100px;
   left: 0;
   background-color: #ddd;
 }
 
-.btn-panel {
+.button-panel {
   top: 0px;
   left: 0px;
   z-index: 10;
   width: 100%;
   height: 100px;
-  line-height: 100px;
+  padding: 15px 50px;
+}
+
+.stylesheet_language-item {
+  margin-right: 30px;
+}
+.stylesheet_language-item.active {
+  font-weight: 700;
+}
+
+.stylesheet_language-radio {
+  margin-right: 5px;
+}
+
+.button-panel-btns {
+  margin-top: 15px;
 }
 
 .section-content {
   overflow: auto;
   border-left: 1px solid #ccc;
   right: 0;
+  line-height: 1.5;
 }
 
 .area:focus {
@@ -374,11 +390,6 @@ body {
   color: #444;
   font: 13px Arial, Helvetica, sans-serif;
   font-size: 0.8125rem;
-}
-.field:focus {
-  border-color: #3eb6e9;
-  background: #fff;
-  color: #000;
 }
 .has-disabled .field, .field[disabled] {
   border-color: #d5dbdb !important;
@@ -423,6 +434,11 @@ body {
 }
 .has-error .field.text-placeholder:focus, .field.has-error.text-placeholder:focus {
   opacity: 0;
+}
+.field:focus {
+  border-color: #3eb6e9;
+  background: #fff;
+  color: #000;
 }
 .field:-moz-placeholder {
   opacity: 1;

@@ -49,11 +49,6 @@ $fieldHasErrorColor: #e74c3c
   background: $fieldDefaultBg
   +shFont($fieldDefaultFontSize, $fieldDefaultFontFamily, false, $fieldDefaultColor)
 
-  +f
-    border-color: $fieldHasActiveBorder
-    background: $fieldHasActiveBg
-    color: $fieldHasActiveColor
-
   .has-disabled &,
   &[disabled]
     @extend %no-select, %cur-not-allowed
@@ -67,6 +62,11 @@ $fieldHasErrorColor: #e74c3c
       border-color: $fieldHasErrorColor
       color: $fieldHasErrorColor
       +placeholder($fieldHasErrorColor)
+
+  +f
+    border-color: $fieldHasActiveBorder
+    background: $fieldHasActiveBg
+    color: $fieldHasActiveColor
 
   // .has-success &
 

@@ -12,12 +12,31 @@
   <script data-headjs-load="js/init.js" src="js/min/head.min.js"></script>
 </head>
 <body>
-  <section role="section" class="section section-area">
-    <div class="btn-panel tac">
-      <span class="btn btn-fake btn-parse-js">Parse</span>
+  <form role="section" class="section section-form section-form-js">
+    <div class="button-panel">
+      <div class="filters filters-js">
+        <ul class="stylesheet_language-list">
+          <li class="stylesheet_language-item active">
+            <label class="stylesheet_language-val">
+              <input class="stylesheet_language-radio stylesheet_language-radio-js" type="radio" name="stylesheet_language" value="CSS/SCSS" checked="checked">
+              CSS/SCSS
+            </label>
+          </li>
+          <li class="stylesheet_language-item">
+            <label class="stylesheet_language-val">
+              <input class="stylesheet_language-radio stylesheet_language-radio-js" type="radio" name="stylesheet_language" value="SASS">
+              SASS
+            </label>
+          </li>
+        </ul>
+      </div>
+      <div class="button-panel-btns clearfix">
+        <button class="btn btn-parse-js left">Parse</button>
+        <span class="btn btn-fake btn-clear-js hide right">Clear</span>
+      </div>
     </div>
     <textarea name="area" class="field area area-js"></textarea>
-  </section><!--end area-->
+  </form><!--end area-->
   <section role="section" class="section section-content section-content-js"></section><!--end content-->
   <section role="section" class="hide section-cod-js"></section><!--end content-->
 </body>
