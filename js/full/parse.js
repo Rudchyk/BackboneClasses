@@ -27,7 +27,7 @@ function parseHTML(blocs, blocShow) {
   
 
   blocShow
-      .append('<h2 class="title">The backbone of styles:</h2>');
+      .append('<h2 class="title">The backbone of classes from HTML tags:</h2>');
 
   for (var i = 0, iLength = $uniqueArrLength; i < iLength; i++) {
     blocShow
