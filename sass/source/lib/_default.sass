@@ -1,0 +1,249 @@
+// ---------------------------------------------------------------------------------------------------------------------
+// --- Placeholder selectors -------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+
+%relative
+  position: relative
+
+%absolute
+  position: absolute
+
+%fixed
+  position: fixed
+
+%default-zi
+  z-index: 1
+
+// Display
+%dib
+  display: inline-block
+
+%block
+  display: block
+
+%none
+  display: none
+
+// Vertical-align
+%vab
+  vertical-align: baseline
+
+%vat
+  vertical-align: top
+
+%vam
+  vertical-align: middle
+
+%vab
+  vertical-align: bottom
+
+// Animation
+%anim-light
+  +transition(all .25s ease)
+
+// Cursor
+%cur-pointer
+  cursor: pointer
+
+%cur-default
+  cursor: default
+
+%cur-help
+  cursor: help
+
+%cur-not-allowed
+  cursor: not-allowed
+
+// Figure
+%circle
+  border-radius: 50%
+
+// --Typography--
+%ellipsis
+  +ellipsis(no-wrap)
+
+%break
+  word-wrap: break-word
+
+%nowrap
+  white-space: nowrap
+
+%no-select
+  +user-select(none)
+
+%has-ps-icon
+  @extend %relative
+  +bf
+    @extend %absolute, %default-zi
+    content: ''
+
+// ---------------------------------------------------------------------------------------------------------------------
+// --- Default classes -------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+
+.table
+  @extend .full-width
+  display: table
+
+// .row
+//   display: table-row
+
+.cell
+  display: table-cell
+
+// Float
+.left
+  float: left
+
+.right
+  float: right
+
+.clear
+  clear: both
+
+.clearfix
+  +pie-clearfix
+
+// Width
+.full-width
+  width: 100%
+
+.half-width
+  width: 50%
+
+.full-height
+  height: 100%
+
+.box
+  @extend %dib, %vat
+
+.segment,
+.icon
+  @extend %dib, %vam
+
+.full-size
+  @extend .full-width, .full-height
+
+.window
+  overflow: hidden
+  @extend .full-width
+
+.wrapper
+  @extend .full-width, %dib, %vat
+
+// Text-align
+.tac
+  text-align: center
+
+.tal
+  text-align: left
+
+.tar
+  text-align: right
+
+// Alignment Blocks In Width
+// ---
+// <div class="jbox">
+//   <div class="box"></div>
+//   <div class="box"></div>
+//   <div class="box"></div>
+// </div>
+// or
+// <ul class="jbox">
+//   <li class="box"></li>
+//   <li class="box"></li>
+//   <li class="box"></li>
+// </ul>
+.jbox
+  line-height: 0
+  text-align: justify
+  +legacy-pie-clearfix
+  .box
+    line-height: normal
+
+// Alignment Block In Height
+// ---
+// <div class="va_outer">
+//   <div class="va_inner"></div>
+// </div>
+.va_outer
+  @extend .tac
+  +bf
+    @extend %dib, %vam, .tac, .full-height
+    content: ''
+  .va_inner
+    @extend %dib, %vam
+
+// --Images--
+.loading
+  background: #fff url(../images/required/loading.gif) no-repeat center
+
+.img_rwd
+  @extend %block
+  max-width: 100%
+  height: auto
+
+// --Position--
+.aborted
+  +pos(absolute, false, false, false, -10000px, 0)
+  opacity: 0
+  visibility: hidden
+
+.ceiling-pos
+  @extend %absolute, %default-zi
+  top: 0
+  left: 0
+
+.left-pos
+  @extend %absolute, %default-zi
+  top: 50%
+  left: 0
+
+.right-pos
+  @extend %absolute, %default-zi
+  top: 50%
+  right: 0
+
+.top-pos
+  @extend %absolute, %default-zi
+  top: 0
+  left: 50%
+
+.bottom-pos
+  @extend %absolute, %default-zi
+  left: 50%
+  bottom: 0
+
+.center-pos
+  +pos("a", 0, 0, 0, 0, 1)
+  margin: auto
+
+.has-ps-left-icon
+  @extend %has-ps-icon
+  +bf
+    @extend .left-pos
+
+.has-ps-right-icon
+  @extend %has-ps-icon
+  +bf
+    @extend .right-pos
+
+.has-ps-top-icon
+  @extend %has-ps-icon
+  +bf
+    @extend .top-pos
+
+.has-ps-bottom-icon
+  @extend %has-ps-icon
+  +bf
+    @extend .bottom-pos
+
+.has-ps-center-icon
+  @extend %has-ps-icon
+  +bf
+    @extend .center-pos
+
+// Scroll
+.default-scroll
+  overflow: auto
+  -webkit-overflow-scrolling: touch

@@ -1,0 +1,93 @@
+// Based on Eric Meyer's reset 2.0 Global reset rules (http://meyerweb.com/eric/tools/css/reset/).
+*
+  &,
+  &:before,
+  &:after
+    +box-sizing(border-box)
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video
+  +reset-box-model // Reset the box model measurements
+  vertical-align: baseline // Reset the font and vertical alignment
+
+// 1. Prevent iOS text size adjust after orientation change, without disabling user zoom
+html
+  @extend .full-height
+  overflow-y: scroll
+
+  font-size: 100.01%
+  -ms-text-size-adjust: 100%  1
+  -webkit-text-size-adjust: 100%  1
+
+body
+  line-height: 1 // Reset a body element
+  -webkit-font-smoothing: antialiased // Fix for webkit rendering
+
+// HTML5 display-role reset for older browsers
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section
+  display: block
+
+// Reset the list style of an element
+ol, ul
+  list-style: none
+
+// Reset a table
+table
+  border-collapse: collapse
+  border-spacing: 0
+
+// Reset a table cell
+caption, th, td
+  vertical-align: middle
+
+  font-weight: normal
+  text-align: left
+
+// Reset a quotation
+q, blockquote
+  quotes: none
+  &:before, &:after
+    content: ""
+    content: none
+
+// Remove the gray background color from active links in IE 10.
+a
+  background: transparent
+
+input, textarea, select, button, a
+  &:active, &:hover, &:focus
+    outline: none
+
+a img, img, fieldset
+  border: none // Resets the border
+
+img
+  vertical-align: middle
+
+  color: transparent
+  font-size: 0
+  -ms-interpolation-mode: bicubic
+
+input[type="submit"], button, label[for]
+  @extend %cur-pointer
+
+  &::-moz-focus-inner
+    +reset-box-model
+
+textarea
+  overflow: auto
+  resize: none
+
+// Address margins set differently in Firefox 4+, Safari 5, and Chrome
+input, button, textarea, select
+  +reset-box-model
+
+input,
+textarea
+  -webkit-user-modify: read-write-plaintext-only
+  -webkit-tap-highlight-color: rgba(255,255,255,0)
+
+input[type="submit"], html input[type="button"], input[type="reset"], button
+  +appearance(button)
+
+h1, h2, h3, h4, h5, h6
+  font-weight: normal

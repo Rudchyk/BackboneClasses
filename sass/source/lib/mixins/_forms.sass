@@ -1,0 +1,16 @@
+// ** Placeholder
+=placeholder($color)
+  // Vendor Extension Prefixes Placeholders
+  $prefixPlaceholders: ":-moz-placeholder", "::-moz-placeholder", "::-webkit-input-placeholder", ":-ms-input-placeholder", ".text-placeholder"
+
+  @each $prefixPlaceholder in $prefixPlaceholders
+    &#{$prefixPlaceholder}
+      opacity: 1
+      color: $color
+      @content
+    @if $prefixPlaceholder == ".text-placeholder"
+      &#{$prefixPlaceholder}:focus
+        opacity: 0
+    @else
+      &:focus#{$prefixPlaceholder}
+        opacity: 0

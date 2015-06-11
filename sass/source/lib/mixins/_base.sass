@@ -1,0 +1,162 @@
+@function lessPoint($value, $unit: $units)
+  @return if(unitless($value), $value*$unit, $value)
+
+=legacy-pie-clearfix
+  &:after
+    clear: both
+    overflow: hidden
+    visibility: hidden
+    display: inline-block
+    width: 100%
+    height: 0
+    content: "\0020"
+
+=pie-clearfix
+  &:after
+    clear: both
+    display: table
+    content: ""
+
+// Reset the box model measurements
+=reset-box-model
+  margin: 0
+  padding: 0
+  border: 0
+
+=dib($align:top)
+  display: inline-block
+  vertical-align: $align
+
+//triangle
+=triangle($width, $height, $bg, $direction)
+  $width: lessPoint($width)
+  $height: lessPoint($height)
+  $halfWidth: ($width/2)
+  border-style: solid
+  @if $direction == "top"
+    border-width: 0 $halfWidth $height $halfWidth
+    border-color: transparent transparent $bg transparent
+  @if $direction == "right"
+    border-width: $halfWidth 0 $halfWidth $height
+    border-color: transparent transparent transparent $bg
+  @if $direction == "bottom"
+    border-width: $height $halfWidth 0 $halfWidth
+    border-color: $bg transparent transparent transparent
+  @if $direction == "left"
+    border-width: $halfWidth $height $halfWidth 0
+    border-color: transparent $bg transparent transparent
+  @if $direction == "top-left"
+    border-width: $height $width 0 0
+    border-color: $bg transparent transparent transparent
+  @if $direction == "top-right"
+    border-width: 0 $width $height 0
+    border-color: transparent $bg transparent transparent
+  @if $direction == "bottom-right"
+    border-width: 0 0 $height $width
+    border-color: transparent transparent $bg transparent
+  @if $direction == "bottom-left"
+    border-width: $width 0 0 $height
+    border-color: transparent transparent transparent $bg
+
+// Arrows
+=arrow($direction, $width, $height, $bg, $once: true, $pos: true)
+  $mirrorSide: opposite-position($direction)
+  $secPos: null
+  $top: "top"
+  $bottom: "bottom"
+  $left: "left"
+  @if $once
+    +psAbsPos
+  @if $pos
+    @if $direction == $top or $direction == $bottom
+      $secPos: $left
+    @else
+      $secPos: $top
+    #{$mirrorSide}: 100%
+    #{$secPos}: 50%
+    margin-#{$secPos}: -(lessPoint($width))
+  @else
+    @content
+  +triangle($width, $height, $bg, $direction)
+
+// Border
+=brd($width, $color, $direction: false, $weight: solid)
+  $width: lessPoint($width)
+  @if $direction
+    border-#{$direction}: $width $weight $color
+  @else
+    border: $width $weight $color
+
+// rotate
+=rotate($deg: 0)
+  $deg: lessPoint($deg, 1deg)
+  +experimental(transform, rotate($deg), -moz, -webkit, -o, -ms, not -khtml)
+  zoom: 1
+
+=selection
+  &::selection
+    @content
+  &::-moz-selection
+    @content
+
+=gpu
+  +transform(translate3d(0, 0, 0))
+
+// Structural pseudo-classes
+=first
+  &:first-child
+    @content
+
+=last
+  &:last-child
+    @content
+
+=nth($child)
+  &:nth-child(#{$child})
+    @content
+
+=nth_n($child, $number: 1)
+  &:nth-child(#{$child}n+#{$number})
+    @content
+
+=nth_e($child)
+  $number: $child - 1
+  &:nth-child(#{$child}n-#{$number})
+    @content
+
+
+// The dynamic pseudo-classes
+=h
+  &:hover
+    @content
+
+=f
+  &:focus
+    @content
+
+=a
+  &:active
+    @content
+
+=t
+  &:target
+    @content
+
+// The :before and :after pseudo-elements
+=ps
+  &:before,
+  &:after
+    @content
+
+=bf
+  &:before
+    @content
+
+=af
+  &:after
+    @content
+
+// The :first-letter pseudo-element
+=firstlet
+  &:first-letter
+    @content

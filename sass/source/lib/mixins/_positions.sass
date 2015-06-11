@@ -1,0 +1,42 @@
+// ** Align icons
+=alignIcon($top, $depth: true)
+  $top: lessPoint($top)
+  +pos("r", $top, false, false, false, false, $depth)
+
+=pos($pos: "a", $top: false, $right: false, $bottom: false, $left: false, $zIndex: false, $depth: true)
+  @if $pos == "a"
+    $pos: "absolute"
+  @if $pos == "r"
+    $pos: "relative"
+  @if $pos == "f"
+    $pos: "fixed"
+  @if $depth
+    @if $pos == "absolute"
+      @extend %absolute
+    @else if $pos == "relative"
+      @extend %relative
+    @else if $pos == "fixed"
+      @extend %fixed
+  @else
+    position: $pos
+  @if $top
+    top: lessPoint($top)
+  @if $right
+    right: lessPoint($right)
+  @if $bottom
+    bottom: lessPoint($bottom)
+  @if $left
+    left: lessPoint($left)
+  @if $pos == "absolute" && $pos == "fixed"
+    @if $zIndex
+      z-index: $zIndex
+    @else
+      z-index: 1
+  @else
+    @if $zIndex
+      z-index: $zIndex
+
+// ** Pseudo
+=psAbsPos($top: false, $right: false, $bottom: false, $left: false, $zIndex: false)
+  +pos(absolute, $top, $right, $bottom, $left, $zIndex)
+  content: ''

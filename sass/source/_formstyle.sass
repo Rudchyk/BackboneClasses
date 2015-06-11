@@ -1,0 +1,150 @@
+// Size
+$fieldDefaultWidth: 310px
+$fieldDefaultHeight: 34px
+$fieldDefaultPadding: 6px 12px
+$fieldDefaultBg: #fff
+$fieldDefaultBdrz: 5px
+$fieldDefaultBd: 1px solid #bdc3c7
+
+// Style
+$fieldHelperContainer: 30px
+
+// Typography
+$fieldDefaultColor: #444
+$fieldDefaultPlaceholderColor: #777
+$fieldDefaultFontFamily: $baseFontFamily
+$fieldDefaultFontSize: 13px
+
+// Active
+$fieldHasActiveBg: #fff
+$fieldHasActiveBorder: #3eb6e9
+$fieldHasActiveColor: #000
+
+// Disabled
+$fieldHasDisabledBg: #f4f6f6
+$fieldHasDisabledColor: #d5dbdb
+
+// Error
+$fieldHasErrorStyle: true
+$fieldHasErrorColor: #e74c3c
+
+.field-box
+  @extend %relative, %dib, %vam
+  width: $fieldDefaultWidth
+  .field
+    @extend .full-width
+
+.field-frame
+  width: $fieldDefaultWidth
+  height: $fieldDefaultHeight
+
+.field
+  @extend .field-frame, %anim-light, %dib, %vam
+  max-width: 100%
+  padding: $fieldDefaultPadding
+  @if $fieldDefaultBd
+    border: $fieldDefaultBd
+  @if $fieldDefaultBdrz
+    border-radius: $fieldDefaultBdrz
+  background: $fieldDefaultBg
+  +shFont($fieldDefaultFontSize, $fieldDefaultFontFamily, false, $fieldDefaultColor)
+
+  +f
+    border-color: $fieldHasActiveBorder
+    background: $fieldHasActiveBg
+    color: $fieldHasActiveColor
+
+  .has-disabled &,
+  &[disabled]
+    @extend %no-select, %cur-not-allowed
+    border-color: $fieldHasDisabledColor !important
+    background: $fieldHasDisabledBg !important
+    color: $fieldHasDisabledColor !important
+
+  @if $fieldHasErrorStyle
+    .has-error &,
+    &.has-error
+      border-color: $fieldHasErrorColor
+      color: $fieldHasErrorColor
+      +placeholder($fieldHasErrorColor)
+
+  // .has-success &
+
+  // Placeholder
+  +placeholder($fieldDefaultPlaceholderColor)
+  
+  +ie8
+    +mlh($fieldDefaultFontSize, $fieldDefaultHeight)
+
+  &.field-full
+    @extend %block, .full-width
+
+.field-hidden
+  @extend .full-size
+  background: transparent
+  +reset-box-model
+  +reset-font
+
+.field-has-helper
+  padding-right: $fieldHelperContainer
+
+.field-helper
+  @extend .right-pos
+
+select
+  &.field
+    padding-right: 0
+    &,
+    &:active,
+    &:focus
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+      -webkit-focus-ring-color: rgba(0, 0, 0, 0)
+      outline: none
+
+  &[multiple].field
+    height: auto
+
+textarea.field
+  height: auto
+
+.field-label,
+.field-label-bl
+  +shFont($fieldDefaultFontSize, $fieldDefaultHeight)
+  font-weight: 700
+
+.field-label
+  @extend %dib, %vam
+  margin-right: 10px
+
+.field-label-bl
+  @extend %block, .full-size
+  width: 100%
+  margin-bottom: 10px
+
+.checkbox-box,
+.radio-box
+  @extend %relative, %dib, %vam, %cur-pointer, %no-select
+  padding-left: 20px
+
+.checkbox,
+.radio
+  +pos("a", 50%, false, false, 0, 10)
+  margin-top: -6px
+
+.radio-box-bl,
+.checkbox-box-bl
+  @extend %block
+  margin-bottom: 10px
+
+.radio-box-inline,
+.checkbox-box-inline
+  @extend %dib, %vam
+  padding-right: 10px
+
+.file
+  @extend %cur-pointer
+  padding: $fieldDefaultPadding
+  height: $fieldDefaultHeight
+
+.form-row
+  margin-bottom: 10px

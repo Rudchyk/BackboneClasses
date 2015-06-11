@@ -1,0 +1,27 @@
+// ** Responsive Web Design *width*--
+@function rwd($elWidth, $parentWidth: $standard)
+  $elWidth: lessPoint($elWidth)
+  $parentWidth: lessPoint($parentWidth)
+  @return $elWidth * 100% / $parentWidth
+
+=rwd($elWidth, $parentWidth: $standard)
+  width: rwd($elWidth, $parentWidth)
+
+=center($Static: $standard, $Max: false, $Min: false)
+  @if ($Static)
+    width: lessPoint($Static)
+  @if ($Max)
+    max-width: lessPoint($Max)
+  @if ($Min)
+    min-width: lessPoint($Min)
+  margin: auto
+
+// Proportion units
+=propBl($width, $proportion: 1, $depth: true)
+  @if $depth
+    @extend %relative
+  @else
+    position: relative
+  overflow: hidden
+  width: $width
+  padding-bottom: $width/$proportion

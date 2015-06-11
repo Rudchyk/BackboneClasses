@@ -1,0 +1,66 @@
+// Based on 960 Grid System - http://960.gs/
+
+// Default variables:
+// $numberOfColumns = 12 (Number of columns)
+// $gutterWidth = 20px (Gutter width)
+// $fullWidth = 960px (Full width)
+// $fluid = false (Activate fluid version)
+// $fluidMargin = 4% (Margin of container in fluid version)
+
+// ---
+// 960 Grid System: 12 Column Grid
+// +gridsystem
+// ---
+// 960 Grid System: 16 Column Grid
+// +gridsystem(16)
+// ---
+// Grid System: Fluid Version
+// +gridsystem(12, 2%, 100%, true)
+// ---
+// Variable Grid System
+// +gridsystem(8, 40, 960)
+
+=gridsystem($numberOfColumns: 12, $gutterWidth: 20px, $fullWidth: 960px, $fluid: false, $fluidMargin: 4%)
+  $gutterWidth: lessPoint($gutterWidth)
+  $fullWidth: lessPoint($fullWidth)
+  $width_for_columns: $fullWidth - $numberOfColumns*$gutterWidth
+  $column_width: $width_for_columns/$numberOfColumns
+  $gutterWidthHalf: $gutterWidth/2
+
+  .container_#{$numberOfColumns}
+    @if $fluid
+      width: 100% - $fluidMargin*2
+      margin-left: $fluidMargin
+      margin-right: $fluidMargin
+    @else
+      +center($fullWidth)
+
+  .grid
+    position: relative
+    float: left
+    margin-left: $gutterWidthHalf
+    margin-right: $gutterWidthHalf
+
+  .grid_#{$numberOfColumns}
+    float: none
+    clear: both
+
+  // Grid >> Children (Alpha ~ First, Omega ~ Last)
+  .alpha
+    margin-left: 0
+
+  .omega
+    margin-right: 0
+
+  // Grids
+  @for $i from 1 through $numberOfColumns
+    $grid_width: $column_width*$i + $gutterWidth*$i - $gutterWidth
+    .container_#{$numberOfColumns}
+      .grid_#{$i}
+        width: $grid_width
+        +bf
+          content: 'grid_#{$i}'
+        +h
+          cursor: pointer
+          +bf
+            content: '#{$grid_width}'

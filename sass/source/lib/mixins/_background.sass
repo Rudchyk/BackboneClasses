@@ -1,0 +1,41 @@
+//simple gradient
+=g($color1, $color2)
+  background-color: $color1
+  +background-image(linear-gradient($color1, $color2))
+
+=gh($size, $color1, $color2)
+  background-color: $color1
+  +background-image(linear-gradient($size, $color1, $color2))
+
+=strongGradient($size, $beginColor, $endColor, $separator)
+  background-color: $beginColor
+  +background-image(linear-gradient($size, $beginColor, $beginColor $separator, $endColor $separator, $endColor))
+
+@function hexToRGB($color)
+  $red: red($color)
+  $green: green($color)
+  $blue: blue($color)
+  @return rgb+unquote('(')+($red, $green, $blue)+unquote(')')
+
+@function hexToRGBA($color, $alpha)
+  $red: red($color)
+  $green: green($color)
+  $blue: blue($color)
+  @return rgba+unquote('(')+($red, $green, $blue, $alpha)+unquote(')')
+
+=rgbaBg($color, $alpha)
+  background-color: $color
+  background-color: hexToRGBA($color, $alpha)
+
+=bgImgBl($path)
+  +image-size($path)
+  background: transparent url("../"+$path) no-repeat top center
+  +background-size(100% 100%)
+
+// Candystriping
+=candystriping($bg:#428BCA, $deg:45, $size: 50)
+  $size: lessPoint($size)
+  $deg: lessPoint($deg, 1deg)
+  background-color: $bg
+  @include background-image(linear-gradient($deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent) )
+  +background-size($size $size)

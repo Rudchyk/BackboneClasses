@@ -1,0 +1,65 @@
+// Determines if you want to include magic selectors in your sprites
+$disable-magic-sprite-selectors:true
+
+// sized sprites
+=image-size($path)
+  width: image-width($path)
+  height: image-height($path)
+
+//shortcut
+=s($sprite, $map: $icons, $class: "icons")
+  @extend %#{$class}
+  +image-size(sprite-file($map, $sprite))
+  background-position: sprite-position($map, $sprite)
+
+//only position of sprite, to remove flicker effect in chrome
+=sp($sprite, $map: $icons, $class: "icons")
+  @extend %#{$class}
+  background-position: sprite-position($map, $sprite)
+
+//icons centered on width
+=centerWidthIcons($name, $map: $icons)
+  $width: image-width(sprite-file($map, $name))
+  margin-left: -($width/2)
+
+//icons centered on height
+=centerHeightIcons($name, $map: $icons)
+  $height: image-height(sprite-file($map, $name))
+  margin-top: -($height/2)
+
+=sah($sprite, $map: $icons)
+  +s($sprite, $map)
+  +centerHeightIcons($sprite, $map)
+
+=saw($sprite, $map: $icons)
+  +s($sprite, $map)
+  +centerWidthIcons($sprite, $map)
+
+//icons centered function
+=iconsPos($name, $distance, $alignmentHeight: true, $size: "right")
+  +s($name, $map: $icons)
+  margin-#{$size}: $distance
+  @if $alignmentHeight
+    +centerHeightIcons($name)
+  else
+    +centerWidthIcons($name)
+
+// SVG
+// insert svg
+=svg($name, $width, $height, $folder: $svg-folder)
+  $width: lessPoint($width)
+  $height: lessPoint($height)
+  +dib(middle)
+  width: $width
+  height: $height
+  background: url('../images/#{$folder}/#{$name}.svg') no-repeat 0 0
+  +background-size($width $height)
+
+// insert svg with fallback
+=svgPng($name, $map: $icons, $folderSvg: $svg-folder)
+  $path: sprite-file($map, $name)
+  $width: image-width($path)
+  $height: image-height($path)
+  +svg($name, $width, $height, $folderSvg)
+  html.no-svg &
+    +s($name, $map)

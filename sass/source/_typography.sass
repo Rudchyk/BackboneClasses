@@ -1,0 +1,111 @@
+// Typography
+$alignImgSide: 16px
+$alignImgBottom: 10px
+
+a,
+.link-fake
+  color: $baseLinkColor
+  text-decoration: underline
+  +h
+    text-decoration: none
+  +a
+    text-decoration: none
+
+.link-fake
+  @extend %cur-pointer
+
+.title
+  @extend %break
+
+.text
+  @extend %break, .clearfix
+  line-height: normal
+  +rem($baseFontSize)
+
+  h1,
+  h2,
+  h3
+    margin: 15px 0
+
+  h4,
+  h5,
+  h6,
+  ul,
+  ol,
+  table,
+  hr
+    margin: 10px 0
+
+  h1
+    +rem(36)
+
+  h2
+    +rem(30)
+
+  h3
+    +rem(24)
+
+  ul
+    list-style: disc
+
+  ol
+    list-style: decimal
+
+  li
+    margin-left: 30px
+
+  p
+    margin-bottom: 15px
+
+  table,
+  td,
+  th
+    border: 1px solid #ccc
+
+  td,
+  th
+    padding: 5px
+
+  hr
+    clear: both
+    border-top: 1px solid #ddd
+
+  blockquote
+    padding-left: 16px
+    margin: 16px 28px 10px 16px
+    border-left: 2px solid #333
+    font-style: italic
+
+  img,
+  embed,
+  object,
+  video
+    max-width: 100%
+    height: auto
+
+  input,
+  textarea,
+  select
+    border: 1px solid #bdc3c7
+    padding: 5px
+
+  input,
+  select
+    min-height: $fieldDefaultHeight
+
+  button,
+  input[type="submit"]
+    @extend .btn
+
+// Images
+.aligncenter
+  @extend %block
+  margin: 0 auto 2px
+
+.alignright
+  @extend .right
+  margin: 0 0 $alignImgBottom $alignImgSide
+
+.alignleft
+  @extend .left
+  margin: 0 $alignImgSide $alignImgBottom 0

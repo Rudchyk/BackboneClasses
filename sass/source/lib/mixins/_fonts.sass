@@ -1,0 +1,84 @@
+// Web safe font combinations
+$Arial: Arial, Helvetica, sans-serif
+$Verdana: Verdana, Geneva, sans-serif
+$Tahoma: Tahoma, Geneva, sans-serif
+$ArialBlack: "Arial Black", Gadget, sans-serif
+$ComicSansMS: "Comic Sans MS", cursive, sans-serif
+$Impact: Impact, Charcoal, sans-serif
+$LucidaSansUnicode: "Lucida Sans Unicode", "Lucida Grande", sans-serif
+$TrebuchetMS: "Trebuchet MS", Helvetica, sans-serif
+$Georgia: Georgia, serif
+$PalatinoLinotype: "Palatino Linotype", "Book Antiqua", Palatino, serif
+$TimesNewRoman: "Times New Roman", Times, serif
+$CourierNew: "Courier New", Courier, monospace
+$LucidaConsole: "Lucida Console", Monaco, monospace
+
+// Bulletproof font face
+=ff($name, $fontFiles, $svgFontName: $fontFiles, $folder: $fontFiles)
+  @font-face
+    font-family: $name
+    src: url('../fonts/#{$folder}/#{$fontFiles}.eot?#iefix') format('embedded-opentype'), url('../fonts/#{$folder}/#{$fontFiles}.woff') format('woff'), url('../fonts/#{$folder}/#{$fontFiles}.ttf') format('truetype'), url('../fonts/#{$folder}/#{$fontFiles}.svg##{$svgFontName}') format('svg')
+
+// Calculating font-size value from Photoshop
+@function rem($fontUnit, $defaultFontSize: $base-font-size)
+  $fontUnit: lessPoint($fontUnit)
+  $defaultFontSize: lessPoint($defaultFontSize)
+  @return $fontUnit/$defaultFontSize + rem
+
+=rem($fontUnit, $defaultFontSize: $base-font-size)
+  $fontUnit: lessPoint($fontUnit)
+  $defaultFontSize: lessPoint($defaultFontSize)
+  font-size: $fontUnit
+  font-size: rem($fontUnit, $defaultFontSize)
+
+// Calculating letter-spacing value from Photoshop
+=lsps($photoshopValue)
+  $cssValue: $photoshopValue/1000
+  letter-spacing: $cssValue + em
+
+// Calculating line-height value from px to percentage
+@function mlh($fontSize, $height)
+  $height: lessPoint($height)
+  $fontSize: lessPoint($fontSize)
+  @return $height/$fontSize
+
+=mlh($fontSize, $height)
+  line-height: mlh($fontSize, $height)
+
+=fontSmoothing($val: antialiased)
+  +experimental(font-smoothing, $val, -moz, -webkit, -o, -ms, not -khtml)
+
+=resDec
+  &,
+  &:hover
+    text-decoration: none
+
+=shFontBox($fontSize, $lineHeight)
+  +rem($fontSize)
+  +mlh($fontSize, $lineHeight)
+
+=shFont($font-size: $base-font-size, $font-family: $Arial, $line-height: "normal", $color: false, $font-weight: false, $font-style: false, $rem: true)
+  $font-size: lessPoint($font-size)
+  $stingLH: null
+  // Calculating line-height
+  @if $line-height == "normal"
+    $stingLH: unquote('/')+"normal"
+  @else if $line-height == false
+    $stingLH: ''
+  @else if unitless($line-height)
+    $stingLH: unquote('/') + $line-height
+  @else
+    $stingLH: unquote('/') + mlh($font-size, $line-height)
+  // Add color
+  @if $color
+    color: $color
+  // Add font-style
+  @if $font-style == false
+    $font-style: null
+  // Add font-weight
+  @if $font-weight == false
+    $font-weight: null
+  // Build font string
+  font: $font-style $font-weight unquote($font-size + $stingLH) $font-family
+  @if $rem
+    font-size: rem($font-size)

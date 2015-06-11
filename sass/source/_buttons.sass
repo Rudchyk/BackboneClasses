@@ -1,0 +1,36 @@
+// Height
+$btnDefaultHeight: $fieldDefaultHeight
+// Typography
+$btnDefaultColor: #fff
+$btnDefaultFontFamily: $baseFontFamily
+$btnDefaultFontSize: 13px
+// Action
+$btnHasDisabledColor: #bdc3c7
+
+.btn
+  @extend %cur-pointer, %anim-light, %dib, %vam
+  overflow: visible
+  height: $btnDefaultHeight
+  padding: 0 10px
+  border: none
+  border-radius: 5px
+  background-color: #3498db
+  +shFont($btnDefaultFontSize, $btnDefaultFontFamily, false, $btnDefaultColor)
+  
+  +h
+    background-color: #5dade2
+
+  &.disabled,
+  &[disabled]
+    @extend %cur-not-allowed, %no-select
+    background-color: $btnHasDisabledColor
+
+.btn-bl
+  @extend %block, .full-width, .tac
+  padding-right: 0
+  padding-left: 0
+
+.btn-fake
+  @extend .tac
+  line-height: $btnDefaultHeight
+  +resDec
