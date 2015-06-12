@@ -97,28 +97,26 @@ $(document).ready(function() {
     });
 
   $area
-    .on('change', function() {
+    .on('keyup', function() {
       var $this = $(this),
           $thisVal = $this.val();
 
-      if ($thisVal == '') {
-
-        $formEl
-          .removeAttr('disabled', 'disabled')
-          .parent()
-          .removeClass('has-disabled');
-        $btnParse
-          .removeAttr('disabled', 'disabled');
-        $cod
-          .html('');
-        $content
-          .html('');
-        $btnClear
-          .hide();
-      } else {
-        $this
-          .removeClass('has-error');
-      }
+      $formEl
+        .removeAttr('disabled', 'disabled')
+        .parent()
+        .removeClass('has-disabled');
+      $btnParse
+        .removeAttr('disabled', 'disabled');
+      $cod
+        .html('');
+      $content
+        .html('');
+      $btnClear
+        .hide();
+    })
+    .on('focus', function() {
+      $(this)
+        .removeClass('has-error');
     });
 
   $btnClear
