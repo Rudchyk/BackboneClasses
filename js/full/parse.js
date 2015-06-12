@@ -69,8 +69,7 @@ $(document).ready(function() {
         $cod
           .html($html);
 
-        var $info = $cod.find('*'),
-            $infoArr = parseHTML($info),
+        var $infoArr = parseHTML($cod),
             $uniqueArr = unique($infoArr); // Видаляємо всі дублюючі класи
 
         if ($alphabetic) {
@@ -138,17 +137,23 @@ $(document).ready(function() {
     });
 });
 
-function parseHTML(blocs) {
+function parseHTML(bloc) {
 
-  var $element = blocs,
+  var $element = bloc.find('*'),
       arr = [],
-      myRe = /\s/;
+      myRe = /\s/g,
+      myReTags = /<.*?>.*?<\/.*?/g;
 
   $element.each(function() {
     var $this = $(this),
-        $thisClass = $this.attr('class');
+        $thisClass = $this.attr('class'),
+        $thisClassTag = myReTags.test($thisClass);
+
+    if ($thisClassTag) {
+      alert('Some class error: ' + $thisClass);
+    }
         
-    if ($thisClass) { // Перевіряємо на наявнісь класу
+    if ($thisClass && !$thisClassTag) { // Перевіряємо на наявнісь класу
       // Перевіряємо на наявнісь декількох класів у елемента
       if(myRe.test($thisClass)) { // Якщо їх декілька виконуємо дію
         var b = $thisClass.split(' '); // Створюємо з них массив по пробілу
