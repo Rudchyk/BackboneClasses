@@ -72,9 +72,6 @@ $(document).ready(function() {
         var $infoArr = parseHTML($cod),
             $uniqueArr = unique($infoArr); // Видаляємо всі дублюючі класи
 
-        console.log($infoArr);
-        console.log($uniqueArr);
-
         if ($alphabetic) {
           $uniqueArr = BubbleSort($uniqueArr);
         }
