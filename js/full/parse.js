@@ -72,6 +72,9 @@ $(document).ready(function() {
         var $infoArr = parseHTML($cod),
             $uniqueArr = unique($infoArr); // Видаляємо всі дублюючі класи
 
+        console.log($infoArr);
+        console.log($uniqueArr);
+
         if ($alphabetic) {
           $uniqueArr = BubbleSort($uniqueArr);
         }
@@ -141,19 +144,21 @@ function parseHTML(bloc) {
 
   var $element = bloc.find('*'),
       arr = [],
-      myRe = /\s/g,
-      myReTags = /<.*?>.*?<\/.*?/g;
+      myRe = /\s/,
+      myReTags = /<.*?>.*?<\/.*?/;
 
   $element.each(function() {
     var $this = $(this),
         $thisClass = $this.attr('class'),
         $thisClassTag = myReTags.test($thisClass);
 
+    console.log($thisClassTag);
+
     if ($thisClassTag) {
       alert('Some class error: ' + $thisClass);
     }
         
-    if ($thisClass && !$thisClassTag) { // Перевіряємо на наявнісь класу
+    if ($thisClass && $thisClassTag == false) { // Перевіряємо на наявнісь класу
       // Перевіряємо на наявнісь декількох класів у елемента
       if(myRe.test($thisClass)) { // Якщо їх декілька виконуємо дію
         var b = $thisClass.split(' '); // Створюємо з них массив по пробілу
@@ -164,6 +169,7 @@ function parseHTML(bloc) {
       }
     }
   });
+
   return arr;
 }
 
