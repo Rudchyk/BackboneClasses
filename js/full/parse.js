@@ -1,14 +1,21 @@
 $(document).ready(function() {
-    var $content = $('.section-content-js'),
+  var $content = $('.section-content-js'),
+      $form = $('.section-form-js'),
       $cod = $('.section-cod-js'),
       $area = $('.area-js'),
+      $filters = $('.filters-js'),
+      $filtersRadio = '.stylesheet_language-radio-js',
+      $sort = $('.sort-checked-js'),
       $btnPanel = $('.btn-panel'),
-      $btnParse = 'btn-parse-js',
-      $btnClear = 'btn-clear-js',
-      disabledClass = 'disabled';
+      $btnParse = $('.btn-parse-js'),
+      $btnClear = $('.btn-clear-js'),
+      disabledClass = 'disabled',
+      $standartclasses = $('.standartclasses-js'),
+      $standartclassesValue = $standartclasses.val(),
+      $formEl = $('.form-el-js');
 
-  $('.filters-js')
-    .on('change', '.stylesheet_language-radio-js', function() {
+  $filters
+    .on('change', $filtersRadio, function() {
       $(this)
         .parent()
         .parent()
@@ -17,31 +24,69 @@ $(document).ready(function() {
         .removeClass('active');
     });
 
+  $sort
+    .on('change', function() {
+      var $this = $(this);
+      if ($this.is(':checked')) {
+        $this
+          .parent()
+          .parent()
+          .addClass('active');
+        } else {
+          $this
+            .parent()
+            .parent()
+            .removeClass('active');
+        }
+    });
 
-  $('.section-form-js')
+  $standartclasses
+    .after($standartclassesValue);
+
+
+  $form
     .on('submit', function(event) {
       event.preventDefault();
       var $this = $(this),
-          $data = $this.serializeArray(),
-          $buttonSubmit = $this.find('.' + $btnParse),
-          $buttonReset = $this.find('.' + $btnClear),
-          $buttonRadio = $this.find('.stylesheet_language-radio-js'),
-          $stylesheet_language = $data[0].value,
-          $html = $data[1].value;
+          $data = $this.serializeObject(),
+          $stylesheet_language = $data["stylesheet_language"],
+          $alphabetic = $data["alphabetic"],
+          $jsclass = $data["jsclass"],
+          $standartclass = $data["standartclass"],
+          $standartclasses = $data["standartclasses"],
+          $fontawesomeclasses = $data["fontawesomeclasses"],
+          $html = $data["area"];
 
       if ($html) {
-        $buttonSubmit
+        $formEl
+          .attr('disabled', 'disabled')
+          .parent()
+          .addClass('has-disabled');
+        $btnParse
           .attr('disabled', 'disabled');
-        $buttonRadio
-          .attr('disabled', 'disabled');
-        $buttonReset
+        $btnClear
           .show();
         $cod
           .html($html);
 
-        var $info = $cod.find('*');
+        var $info = $cod.find('*'),
+            $infoArr = parseHTML($info),
+            $uniqueArr = unique($infoArr); // Видаляємо всі дублюючі класи
 
-        parseHTML($info, $content, $stylesheet_language);
+        if ($alphabetic) {
+          $uniqueArr = BubbleSort($uniqueArr);
+        }
+        if ($jsclass) {
+          $uniqueArr = nojsClass($uniqueArr);
+        }
+        if ($standartclass) {
+          $uniqueArr = standartclassFn($uniqueArr, $standartclasses);
+        }
+        if ($fontawesomeclasses) {
+          $uniqueArr = fontawesomeclassesFn($uniqueArr);
+        }
+
+        showBackboneClasses($uniqueArr, $content, $stylesheet_language);
 
       } else {
         $area
@@ -57,15 +102,18 @@ $(document).ready(function() {
           $thisVal = $this.val();
 
       if ($thisVal == '') {
-        $('.' + $btnParse)
-          .removeAttr('disabled');
-        $('.stylesheet_language-radio-js')
-          .removeAttr('disabled');
+
+        $formEl
+          .removeAttr('disabled', 'disabled')
+          .parent()
+          .removeClass('has-disabled');
+        $btnParse
+          .removeAttr('disabled', 'disabled');
         $cod
           .html('');
         $content
           .html('');
-        $('.' + $btnClear)
+        $btnClear
           .hide();
       } else {
         $this
@@ -73,14 +121,16 @@ $(document).ready(function() {
       }
     });
 
-  $('.' + $btnClear)
+  $btnClear
     .on('click', function() {
       $(this)
         .hide();
-      $('.' + $btnParse)
-        .removeAttr('disabled');
-      $('.stylesheet_language-radio-js')
-        .removeAttr('disabled');
+      $formEl
+        .removeAttr('disabled', 'disabled')
+        .parent()
+        .removeClass('has-disabled');
+      $btnParse
+        .removeAttr('disabled', 'disabled');
       $area
         .val('');
       $cod
@@ -90,43 +140,37 @@ $(document).ready(function() {
     });
 });
 
-function parseHTML(blocs, blocShow, stylesheet_language) {
+function parseHTML(blocs) {
 
   var $element = blocs,
-      $arr = [],
-      target = ' ';
+      arr = [],
+      myRe = /\s/;
 
   $element.each(function() {
-
     var $this = $(this),
         $thisClass = $this.attr('class');
         
     if ($thisClass) { // Перевіряємо на наявнісь класу
-
       // Перевіряємо на наявнісь декількох класів у елемента
-      if($thisClass.indexOf(target) + 1) { // Якщо їх декілька виконуємо дію
+      if(myRe.test($thisClass)) { // Якщо їх декілька виконуємо дію
         var b = $thisClass.split(' '); // Створюємо з них массив по пробілу
-        $arr.push.apply($arr, b); // Добавляємо в наш глобальний массив
+
+        arr.push.apply(arr, b); // Добавляємо в наш глобальний массив
       } else {
-        $arr.push($thisClass); // Якщо один то відразу добавляємо в масив
+        arr.push($thisClass); // Якщо один то відразу добавляємо в масив
       }
     }
-
   });
+  return arr;
+}
 
-  var $uniqueArr = unique($arr), // Видаляємо всі дублюючі класи
-      $noJsArr = nojsClass($uniqueArr),
-      // $sortArr = BubbleSort($noJsArr),
-      $mainArr = $noJsArr,
-      $mainArrLength = $mainArr.length;
-
-  // console.log($nnn);
+function showBackboneClasses(arr, blocShow, stylesheet_language) {
 
   blocShow
       .append('<h2 class="title">The backbone of classes from HTML tags:</h2>');
 
-  for (var i = 0, iLength = $mainArrLength; i < iLength; i++) {
-    var styleClass = $mainArr[i],
+  for (var i = 0, iLength = arr.length; i < iLength; i++) {
+    var styleClass = arr[i],
         styleClassItem = '';
 
     if (stylesheet_language == 'SASS') {
@@ -135,13 +179,11 @@ function parseHTML(blocs, blocShow, stylesheet_language) {
       styleClassItem = '.' + styleClass + '{}<br>';
     }
 
-
-
     blocShow
       .append(styleClassItem);
   }
-
 }
+
 
 function unique(arr) {
   var result = [];
@@ -158,10 +200,48 @@ function unique(arr) {
   return result;
 }
 
+function standartclassFn(arr, sortArr) {
+
+  var result = [],
+      str = arr.join(' '),
+      sortData = sortArr.split(', ');
+
+  // console.log(str);
+  for (var i = 0; i < sortData.length; i++) {
+    var $item = sortData[i];
+    str = str.replace($item, '');
+  }
+
+  var rArr = str.split(' ');
+
+  for (var j = 0; j < rArr.length; j++) {
+    var ritem = rArr[j];
+    if (ritem) {
+      result.push(ritem);
+    }
+  }
+  return result;
+}
+
 
 function nojsClass(arr) {
   var result = [],
       myRe = /-js/;
+
+  for (var i = 0; i < arr.length; i++) {
+    var str = arr[i];
+
+    if (!myRe.test(str)) {
+      result.push(str);
+    }
+  }
+
+  return result;
+}
+
+function fontawesomeclassesFn(arr) {
+  var result = [],
+      myRe = /fa/;
 
   for (var i = 0; i < arr.length; i++) {
     var str = arr[i];
@@ -185,3 +265,20 @@ function BubbleSort(A) {
     }
     return A;
 }
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
