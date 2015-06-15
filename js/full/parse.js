@@ -12,7 +12,7 @@ $(document).ready(function() {
       disabledClass = 'disabled',
       $standartclasses = $('.standartclasses-js'),
       $standartclassesValue = $standartclasses.val(),
-      $formEl = $('.form-el-js');
+      $formEl = $('.filter-el-js');
 
   $filters
     .on('change', $filtersRadio, function() {
@@ -70,7 +70,8 @@ $(document).ready(function() {
           .html($html);
 
         var $infoArr = parseHTML($cod),
-            $uniqueArr = unique($infoArr); // Видаляємо всі дублюючі класи
+            $uniqueArr = sortByNested($infoArr),
+            $uniqueArr = unique($uniqueArr); // Видаляємо всі дублюючі класи
 
         if ($alphabetic) {
           $uniqueArr = BubbleSort($uniqueArr);
@@ -149,10 +150,8 @@ function parseHTML(bloc) {
         $thisClass = $this.attr('class'),
         $thisClassTag = myReTags.test($thisClass);
 
-    console.log($thisClassTag);
-
     if ($thisClassTag) {
-      alert('Some class error: ' + $thisClass);
+      alert('Class has condition: ' + $thisClass + '. It will not be parsed.');
     }
         
     if ($thisClass && $thisClassTag == false) { // Перевіряємо на наявнісь класу
@@ -232,7 +231,7 @@ function standartclassFn(arr, sortArr) {
 
 function nojsClass(arr) {
   var result = [],
-      myRe = /-js/;
+      myRe = /-js$/;
 
   for (var i = 0; i < arr.length; i++) {
     var str = arr[i];
@@ -247,7 +246,7 @@ function nojsClass(arr) {
 
 function fontawesomeclassesFn(arr) {
   var result = [],
-      myRe = /fa/;
+      myRe = /^fa/;
 
   for (var i = 0; i < arr.length; i++) {
     var str = arr[i];
@@ -270,6 +269,37 @@ function BubbleSort(A) {
       }
     }
     return A;
+}
+
+function sortByNested(arr) {
+  var result = [],
+      tempResult = [],
+      arrSort = unique(arr),
+      str = arrSort.join(' ');
+
+
+  for (var i = 0; i < arr.length; i++) {
+    var $item = arr[i],
+        $itemArr = $item.split('-'),
+        $itemMain = $itemArr[0];
+
+    tempResult.push($itemMain);
+  }
+  var uniqueTempResult = unique(tempResult);
+
+  for (var j = 0; j < uniqueTempResult.length; j++) {
+    var $jItem = uniqueTempResult[j],
+        re = new RegExp('(' + $jItem + ')-([a-z0-9+-]*)', 'g'),
+        resulrRe = str.match(re);
+
+    if (resulrRe) {
+      result.push.apply(result, resulrRe);
+    } else {
+      result.push($jItem);
+    }
+  }
+
+  return result;
 }
 
 $.fn.serializeObject = function()

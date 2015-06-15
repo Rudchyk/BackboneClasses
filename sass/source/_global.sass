@@ -51,15 +51,17 @@ body
 
 .filter-item
   line-height: 1.5
+  color: #858585
   &.active
-    font-weight: 700
+    color: #000
 
 .filter-label
-  @extend %cur-pointer
+  @extend %cur-pointer, %relative, .box
+  padding-left: 20px
 
 .filter-el
   @extend %cur-pointer
-  margin-right: 5px
+  @include pos("a", 1px, false, false, 0, 10)
 
 // .sort-list
 // .sort-item
@@ -89,18 +91,23 @@ body
 
 .help
   @extend %cur-help
+  .has-disabled &
+    @extend %cur-not-allowed
 
 .bl-has-tooltip
   @extend %relative
   +h
     .tooltip
       display: block
+    .has-disabled &
+      .tooltip
+        display: none
 
 $tooltipArrowHeight: 5px
 .tooltip
   +pos("a", 100%, false, false, 0, 10)
   display: none
-  width: 200px
+  width: 120px
   background-color: #FFF
   padding: 10px
   box-shadow: 0 0 5px rgba(0,0,0,.3)
