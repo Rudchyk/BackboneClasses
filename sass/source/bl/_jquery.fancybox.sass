@@ -1,0 +1,197 @@
+$fancyboxPading: 15px
+
+$fancyboxSkinBg: #f9f9f9
+$fancyboxSkinFontColor: #444
+
+$fancyboxLoadingSize: 44px
+$fancyboxLoadingPos: $fancyboxLoadingSize/2
+
+$fancyboxNavWidth: 40%
+// $fancyboxNavSpanWidtn: image-width(sprite-file($icons, fancyPrev))
+// $fancyboxNavSpanHeight: image-height(sprite-file($icons, fancyPrev))
+
+$fancyboxOverlayBg: #000
+$fancyboxOverlayA: .75
+
+.fancybox-wrap,
+.fancybox-skin,
+.fancybox-outer,
+.fancybox-inner,
+.fancybox-image,
+.fancybox-wrap iframe,
+.fancybox-wrap object,
+.fancybox-nav,
+.fancybox-nav span,
+.fancybox-tmp
+  +reset-box-model
+  vertical-align: top
+
+.fancybox-wrap
+  +pos(absolute, 0, false, false, 0, 8020)
+  +f
+    outline: none
+
+.fancybox-skin
+  @extend %relative
+  background: $fancyboxSkinBg
+  border-radius: 4px
+  color: $fancyboxSkinFontColor
+  text-shadow: none
+
+.fancybox-opened
+  z-index: 8030
+
+  .fancybox-skin
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .5)
+
+.fancybox-outer,
+.fancybox-inner
+  @extend %relative
+
+.fancybox-inner
+  overflow: hidden
+
+  .fancybox-type-iframe &
+    -webkit-overflow-scrolling: touch
+
+.fancybox-error
+  padding: $fancyboxPading
+  margin: 0
+
+  color: $baseFontColor
+  font: italic bold $baseFontSize+unquote('/')+"normal" $baseFontFamily
+  font-size: rem($baseFontSize)
+  white-space: nowrap
+
+.fancybox-image,
+.fancybox-iframe
+  @extend %block, .full-size
+
+.fancybox-image
+  max-width: 100%
+  max-height: 100%
+
+#fancybox-loading
+  @extend %cur-pointer, .loading
+  +pos(fixed, 50%, false, false, 50%, 8060)
+  opacity: .8
+  width: $fancyboxLoadingSize
+  height: $fancyboxLoadingSize
+  margin: -$fancyboxLoadingPos 0 0 -$fancyboxLoadingPos
+  border-radius: 5px
+
+.fancybox-close
+  @extend %cur-pointer, %no-select
+  +pos(absolute, -18px, -18px, false, false, 8040)
+  +s(fancyClose)
+  +h
+    opacity: .9
+
+// .fancybox-nav
+//   @extend %cur-pointer
+//   +pos(absolute, 0, false, false, false, 8040)
+//   width: $fancyboxNavWidth
+//   height: 100%
+//   background: transparent
+//   -webkit-tap-highlight-color: rgba(0,0,0,0)
+//   text-decoration: none
+
+//   +h
+//     span
+//       visibility: visible
+
+//   // span
+//   //   @extend %cur-pointer
+//   //   +pos(absolute, 50%, false, false, false, 8040)
+//   //   visibility: hidden
+//   //   width: $fancyboxNavSpanWidtn
+//   //   height: $fancyboxNavSpanHeight
+//   //   margin-top: -($fancyboxNavSpanWidtn/2)
+//   //   +h
+//   //     opacity: .9
+
+// .fancybox-prev
+//   left: 0
+
+//   span
+//     left: 10px
+//     // +sp(fancyPrev)
+
+// .fancybox-next
+//   right: 0
+
+//   span
+//     right: 10px
+//     // +sp(fancyNext)
+
+.fancybox-tmp
+  +pos(absolute, -99999px, false, false, -99999px, false)
+  max-width: 99999px
+  max-height: 99999px
+  overflow: visible !important
+
+/* Overlay helper */
+.fancybox-lock
+  overflow: visible !important
+  width: auto
+
+  body
+    overflow: hidden !important
+
+  .fancybox-overlay
+    overflow: auto
+    overflow-y: scroll
+
+.fancybox-lock-test
+  overflow-y: hidden !important
+
+.fancybox-overlay
+  +pos(absolute, 0, false, false, 0, 8010)
+  overflow: hidden
+  display: none
+  +rgbaBg($fancyboxOverlayBg, $fancyboxOverlayA)
+
+.fancybox-overlay-fixed
+  +pos(fixed, false, 0, 0, false, 8000)
+
+/* Title helper */
+.fancybox-title
+  @extend %relative
+  z-index: 8050
+  visibility: hidden
+  +shFont($baseFontSize, $baseFontFamily, "normal", false, 700, italic)
+  text-shadow: none
+
+  .fancybox-opened &
+    visibility: visible
+
+.fancybox-title-float-wrap
+  @extend .tac
+  +pos(absolute, false, 50%, 0, false, 8050)
+  margin-bottom: -35px
+
+  .child
+    display: inline-block
+    padding: 2px 20px
+    margin-right: -100%
+    +rgbaBg(#000, .8)
+    border-radius: 15px
+    color: #FFF
+    font-weight: bold
+    text-shadow: 0 1px 2px #222
+    line-height: 24px
+    white-space: nowrap
+
+.fancybox-title-outside-wrap
+  @extend %relative
+  margin-top: 10px
+  color: #fff
+
+.fancybox-title-inside-wrap
+  padding-top: 10px
+
+.fancybox-title-over-wrap
+  +pos(absolute, false, false, 0, 0, false)
+  padding: 10px
+  color: #fff
+  +rgbaBg(#000, .8)

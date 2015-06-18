@@ -12,7 +12,11 @@ $(document).ready(function() {
       disabledClass = 'disabled',
       $standartclasses = $('.standartclasses-js'),
       $standartclassesValue = $standartclasses.val(),
-      $formEl = $('.filter-el-js');
+      $formEl = $('.filter-el-js'),
+      $modal = '#modal',
+      errorTgs = [/(\$?\{.*?\}\}?)/gmi, /(<\/?is(?:if|else|elseif|loop).*?\/?>)/gmi, /(<\?php.*?\?>)/gmi];
+
+      // /(<\/?is(?:if|else|elseif)\s?(?:[a-z\d\s]+?)?\/?>)/gmi
 
   $filters
     .on('change', $filtersRadio, function() {
@@ -55,23 +59,29 @@ $(document).ready(function() {
           $standartclass = $data["standartclass"],
           $standartclasses = $data["standartclasses"],
           $fontawesomeclasses = $data["fontawesomeclasses"],
-          $html = $data["area"];
+          $html = $data["area"],
+          $htmlNoErrorTags = fixString($html, errorTgs);
 
       if ($html) {
+
+        showErrors($html, errorTgs, $modal);
+
         $formEl
           .attr('disabled', 'disabled')
           .parent()
           .addClass('has-disabled');
+
         $btnParse
           .attr('disabled', 'disabled');
+
         $btnClear
           .show();
-        $cod
-          .html($html);
 
-        var $infoArr = parseHTML($cod),
-            $uniqueArr = sortByNested($infoArr),
-            $uniqueArr = unique($uniqueArr); // Видаляємо всі дублюючі класи
+        $cod
+          .html($htmlNoErrorTags);
+
+        var $mainData = parseHTML($cod),
+            $uniqueArr = sortByNested($mainData);
 
         if ($alphabetic) {
           $uniqueArr = BubbleSort($uniqueArr);
@@ -111,6 +121,8 @@ $(document).ready(function() {
         .html('');
       $content
         .html('');
+      $($modal)
+        .html('');
       $btnClear
         .hide();
     })
@@ -135,6 +147,8 @@ $(document).ready(function() {
         .html('');
       $content
         .html('');
+      $($modal)
+        .html('');
     });
 });
 
@@ -142,29 +156,24 @@ function parseHTML(bloc) {
 
   var $element = bloc.find('*'),
       arr = [],
-      myRe = /\s/,
-      myReTags = /<.*?>.*?<\/.*?/;
-
+      myRe = /\s/;
+      
   $element.each(function() {
     var $this = $(this),
         $thisClass = $this.attr('class'),
-        $thisClassTag = myReTags.test($thisClass);
+        $thisClassHasSpace = myRe.test($thisClass);
 
-    if ($thisClassTag) {
-      alert('Class has condition: ' + $thisClass + '. It will not be parsed.');
-    }
-        
-    if ($thisClass && $thisClassTag == false) { // Перевіряємо на наявнісь класу
       // Перевіряємо на наявнісь декількох класів у елемента
-      if(myRe.test($thisClass)) { // Якщо їх декілька виконуємо дію
-        var b = $thisClass.split(' '); // Створюємо з них массив по пробілу
+      if($thisClassHasSpace) { // Якщо їх декілька виконуємо дію
+        var $thisClassArr = $thisClass.split(' '); // Створюємо з них массив по пробілу
 
-        arr.push.apply(arr, b); // Добавляємо в наш глобальний массив
+        arr.push.apply(arr, $thisClassArr); // Добавляємо в наш глобальний массив
       } else {
         arr.push($thisClass); // Якщо один то відразу добавляємо в масив
       }
-    }
   });
+
+  arr = deleteEmptyEl(arr);
 
   return arr;
 }
@@ -189,7 +198,6 @@ function showBackboneClasses(arr, blocShow, stylesheet_language) {
   }
 }
 
-
 function unique(arr) {
   var result = [];
 
@@ -208,21 +216,15 @@ function unique(arr) {
 function standartclassFn(arr, sortArr) {
 
   var result = [],
-      str = arr.join(' '),
-      sortData = sortArr.split(', ');
+      arrData = arr,
+      arrDataLength = arrData.length;
 
-  // console.log(str);
-  for (var i = 0; i < sortData.length; i++) {
-    var $item = sortData[i];
-    str = str.replace($item, '');
-  }
+  for (var i = 0, iLength = arrDataLength; i < iLength; i++) {
+    var arrDataItem = arrData[i],
+        arrDataItemRE = new RegExp(arrDataItem + '(?=,)', 'g');
 
-  var rArr = str.split(' ');
-
-  for (var j = 0; j < rArr.length; j++) {
-    var ritem = rArr[j];
-    if (ritem) {
-      result.push(ritem);
+    if (!arrDataItemRE.test(sortArr)) {
+      result.push(arrDataItem);
     }
   }
   return result;
@@ -271,31 +273,49 @@ function BubbleSort(A) {
     return A;
 }
 
+function deleteEmptyEl(A) {
+    var n = A.length,
+        result = [];
+    for (var i = 0, istr = n; i < istr; i++) {
+      var item = A[i];
+      if (item) {
+        result.push(item);
+      }
+    }
+    return result;
+}
+
 function sortByNested(arr) {
   var result = [],
       tempResult = [],
       arrSort = unique(arr),
-      str = arrSort.join(' ');
+      str = arrSort.join(' '),
+      myRe = /-/;
 
+  for (var i = 0; i < arrSort.length; i++) {
+    var $item = arrSort[i];
 
-  for (var i = 0; i < arr.length; i++) {
-    var $item = arr[i],
-        $itemArr = $item.split('-'),
-        $itemMain = $itemArr[0];
+    if (str != '') {
+      if (myRe.test($item)) {
 
-    tempResult.push($itemMain);
-  }
-  var uniqueTempResult = unique(tempResult);
+        var $itemArr = $item.split('-'),
+            $itemArrHead = $itemArr.shift();
+            re = new RegExp('(' + $itemArrHead + ')\-?([a-z0-9+-]+)?', 'g'),
+            resulrRe = str.match(re);
 
-  for (var j = 0; j < uniqueTempResult.length; j++) {
-    var $jItem = uniqueTempResult[j],
-        re = new RegExp('(' + $jItem + ')-([a-z0-9+-]*)', 'g'),
-        resulrRe = str.match(re);
+        if (resulrRe) {
+          resulrRe = BubbleSort(resulrRe);
+          result.push.apply(result, resulrRe);
+        };
 
-    if (resulrRe) {
-      result.push.apply(result, resulrRe);
-    } else {
-      result.push($jItem);
+        str = str.replace(re, '');
+
+      } else {
+        var reItem = new RegExp('^' + $item, 'g')
+
+        str = str.replace(reItem, '');
+        result.push($item);
+      }
     }
   }
 
@@ -318,3 +338,71 @@ $.fn.serializeObject = function()
     });
     return o;
 };
+
+function fixString(arr, errorTags) {
+  var str = arr,
+      bug = errorTags,
+      bugLength = bug.length;
+
+  // console.log(str);
+
+  for (var i = 0, iLength = bugLength; i < iLength; i++) {
+    var item = bug[i];
+
+    str = str.replace(item, '');
+  };
+
+  // console.log(str);
+
+  return str;
+}
+
+function showErrors(arr, errorTags, modal) {
+  var str = arr,
+      bug = errorTags,
+      bugVarRe = bug[0],
+      bugVarArr = str.search(bugVarRe);
+      bugLength = bug.length,
+      bags = [],
+      fixBugsArr = [];
+
+  
+  console.log(bugVarArr);
+
+  // for (var i = 0, iLength = bugLength; i < iLength; i++) {
+  //   var item = bug[i],
+  //       reResult = str.match(item);
+
+  //   bags.push.apply(bags, reResult);
+  // };
+
+  // if (bags.length != 0) {
+  //   bags = unique(bags);
+  //   // str = str.replace(/</g, '&lt;'),
+  //   // str = str.replace(/>/g, '&gt;');
+
+  //   console.log(str);
+
+  //   // for (var j = 0, jLength = bags.length; j < jLength; j++) {
+  //   //   var jItem = bags[j];
+
+  //   //   jItem = jItem.replace(/</g, '&lt;');
+  //   //   jItem = jItem.replace(/>/g, '&gt;');
+
+  //   //   var reIn = '<span class="message">' + jItem + '</span>',
+  //   //       reJitem = jItem.replace(/(\.|\^|\$|\*|\+|\?|\||\\|\(|\)|\[|\]|\{|\})/g, '\\$1'),
+  //   //       regJitem = new RegExp(reJitem, 'gmi');
+
+  //   //   str = str.replace(regJitem, reIn);
+  //   // }
+
+  //   $(modal)
+  //     .html('<pre>' + str + '</pre>');
+
+  //   // Initialization fancyBox
+  //   $.fancybox.open({
+  //     href: modal,
+  //     padding: false
+  //   });
+  // }
+}

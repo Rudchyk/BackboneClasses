@@ -18,6 +18,7 @@ if (head.browser.ie && head.browser.version < 9) {
 
 head.js(
   paths.jqueryJS,
+  paths.source + 'js/min/jquery.fancybox.min.js',
   paths.source + 'js/full/parse.js',
   function() {}
 );

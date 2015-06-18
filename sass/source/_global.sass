@@ -6,6 +6,13 @@ $baseLinkColor: #287fc3
 $filtersPanel: 185px
 $sectionPadding: 25px
 
+// **Sprites
+$spacingDefault: 20px
+
+// PNG sprites with padding
+$icons: sprite-map("icons/*.png", $spacing: $spacingDefault)
+%icons
+  background: $icons no-repeat
 
 body
   @extend %relative
@@ -120,3 +127,10 @@ $tooltipArrowHeight: 5px
     +pos("a", false, false, 100%, 0, 10)
     content: ''
     +triangle(14px, $tooltipArrowHeight, #fff, "top")
+
+.modal
+  padding: 50px
+
+.message
+  color: #F04F37
+  background: yellow
