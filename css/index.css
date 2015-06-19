@@ -12,10 +12,10 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
 
 html {
-  overflow-y: scroll;
+  overflow-y: hidden;
   font-size: 100.01%;
-  -ms-text-size-adjust: 100% 1;
-  -webkit-text-size-adjust: 100% 1;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -107,12 +107,12 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
 }
 
-.has-ps-left-icon:before, .has-ps-right-icon:before, .has-ps-top-icon:before, .has-ps-bottom-icon:before, .has-ps-center-icon:before, .aborted, .ceiling-pos, .left-pos, .right-pos, .field-helper, .top-pos, .bottom-pos, .center-pos, .filter-el, .tooltip, .tooltip:before, .checkbox,
+.has-ps-left-icon:before, .has-ps-right-icon:before, .has-ps-top-icon:before, .has-ps-bottom-icon:before, .has-ps-center-icon:before, .aborted, .ceiling-pos, .left-pos, .right-pos, .field-helper, .top-pos, .bottom-pos, .center-pos, .section, .filter-el, .tooltip, .tooltip:before, .checkbox,
 .radio, .fancybox-wrap, .fancybox-close, .fancybox-tmp, .fancybox-overlay, .fancybox-title-float-wrap, .fancybox-title-over-wrap {
   position: absolute;
 }
 
-.section, #fancybox-loading, .fancybox-overlay-fixed {
+.wrap, #fancybox-loading, .fancybox-overlay-fixed {
   position: fixed;
 }
 
@@ -325,15 +325,25 @@ input[type="submit"], button, label[for], .filter-label, .filter-el, .checkbox-b
 }
 
 body {
+  overflow: hidden;
   background-color: #FFF;
   color: #444;
   font: 16px/1 Arial, Helvetica, sans-serif;
   font-size: 1rem;
 }
 
+.wrap {
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 10;
+}
+
 .section {
   top: 0px;
   z-index: 10;
+  overflow: auto;
   width: 50%;
   height: 100%;
   padding: 25px;
@@ -444,6 +454,8 @@ body {
 
 .modal {
   padding: 50px;
+  width: 1200px;
+  max-height: 700px;
 }
 
 .message {
@@ -884,12 +896,15 @@ a:active,
   overflow: visible !important;
   width: auto;
 }
+.fancybox-lock.fancybox-margin,
+.fancybox-lock .fancybox-margin {
+  margin: 0;
+}
 .fancybox-lock body {
   overflow: hidden !important;
 }
 .fancybox-lock .fancybox-overlay {
-  overflow: auto;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 .fancybox-lock-test {

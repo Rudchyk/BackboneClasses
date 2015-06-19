@@ -135,12 +135,17 @@ $fancyboxOverlayA: .75
   overflow: visible !important
   width: auto
 
+  &.fancybox-margin,
+  .fancybox-margin
+    margin: 0
+
   body
     overflow: hidden !important
 
   .fancybox-overlay
-    overflow: auto
-    overflow-y: scroll
+    overflow: hidden
+    // overflow: auto
+    // overflow-y: scroll
 
 .fancybox-lock-test
   overflow-y: hidden !important

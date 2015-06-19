@@ -13,8 +13,7 @@ $(document).ready(function() {
       $standartclasses = $('.standartclasses-js'),
       $standartclassesValue = $standartclasses.val(),
       $formEl = $('.filter-el-js'),
-      $modal = '#modal',
-      errorTgs = [/(\$?\{.*?\}\}?)/gmi, /(<\/?is(?:if|else|elseif|loop).*?\/?>)/gmi, /(<\?php.*?\?>)/gmi];
+      $modal = '#modal';
 
       // /(<\/?is(?:if|else|elseif)\s?(?:[a-z\d\s]+?)?\/?>)/gmi
 
@@ -60,6 +59,7 @@ $(document).ready(function() {
           $standartclasses = $data["standartclasses"],
           $fontawesomeclasses = $data["fontawesomeclasses"],
           $html = $data["area"],
+          errorTgs = [/(\$?\{.*?\}\}?)/gmi, /(<\/?is.*?\/?>)/gmi, /(<\?php.*?\?>)/gmi],
           $htmlNoErrorTags = fixString($html, errorTgs);
 
       if ($html) {
@@ -287,37 +287,43 @@ function deleteEmptyEl(A) {
 
 function sortByNested(arr) {
   var result = [],
-      tempResult = [],
       arrSort = unique(arr),
       str = arrSort.join(' '),
       myRe = /-/;
+
+  str = ' ' + str + ' ';
 
   for (var i = 0; i < arrSort.length; i++) {
     var $item = arrSort[i];
 
     if (str != '') {
       if (myRe.test($item)) {
-
         var $itemArr = $item.split('-'),
-            $itemArrHead = $itemArr.shift();
-            re = new RegExp('(' + $itemArrHead + ')\-?([a-z0-9+-]+)?', 'g'),
-            resulrRe = str.match(re);
+            $itemArrHead = $itemArr[0],
+            re = new RegExp('\\s(?=((' + $itemArrHead + ')\\-?([a-z0-9+-]+)?)(?=\\s))', 'g'),
+            str = str.replace(re, ' UNIK-'),
+            re2 = new RegExp('(UNIK)-([a-z0-9+_+-]+)', 'g'),
+            resulrRe = str.match(re2),
+            resulrReFix = [];
 
         if (resulrRe) {
-          resulrRe = BubbleSort(resulrRe);
-          result.push.apply(result, resulrRe);
+          for (var j = 0, jLength = resulrRe.length; j < jLength; j++) {
+            var jItem = resulrRe[j];
+            jItem = jItem.replace(/UNIK-/, '');
+            resulrReFix.push(jItem);
+          }
+
+          resulrReFix = BubbleSort(resulrReFix);
+          result.push.apply(result, resulrReFix);
         };
 
-        str = str.replace(re, '');
-
+        str = str.replace(re2, ' ');
       } else {
-        var reItem = new RegExp('^' + $item, 'g')
-
-        str = str.replace(reItem, '');
         result.push($item);
       }
     }
   }
+  result = unique(result);
 
   return result;
 }
@@ -344,65 +350,102 @@ function fixString(arr, errorTags) {
       bug = errorTags,
       bugLength = bug.length;
 
-  // console.log(str);
-
   for (var i = 0, iLength = bugLength; i < iLength; i++) {
     var item = bug[i];
 
     str = str.replace(item, '');
   };
 
-  // console.log(str);
+  return str;
+}
+
+function showErrors(str, errorTags, modal) {
+  for (var err = 0, errLength = errorTags.length; err < errLength; err++) {
+    var errItem = errorTags[err];
+
+    if (errItem.test(str)) {
+      error = true;
+      break;
+    }
+  }
+
+  if (error) {
+    var bugVarRe = errorTags.shift();
+        bugVarArr = str.match(bugVarRe),
+        tagsArr = [],
+        flagVAr = 'sh_',
+        flagTag = 'tag_';
+
+    if (bugVarArr) {
+      str = reFlag(bugVarArr, str, flagVAr);
+    }
+
+    for (var j = 0, jLength = errorTags.length; j < jLength; j++) {
+      var tagsItems = str.match(errorTags[j]);
+
+      if (tagsItems) {
+        tagsArr.push.apply(tagsArr, tagsItems)
+      }
+    }
+
+    if (tagsArr.length) {
+      str = reFlag(tagsArr, str, flagTag);
+    }
+    
+    str = reTagShow(str);
+
+    if (tagsArr.length) {
+      str = replaceShowStr(str, tagsArr, flagTag);
+    }
+
+    if (bugVarArr) {
+      str = replaceShowStr(str, bugVarArr, flagVAr);
+    }
+
+    $(modal)
+      .html('<pre>' + str + '</pre>');
+
+    $.fancybox.open({
+      href: modal,
+      padding: false
+    });
+  }
+}
+
+function fixRe(str) {
+  var strFix = str;
+      result = strFix.replace(/(\.|\^|\$|\*|\+|\?|\||\\|\(|\)|\[|\]|\{|\})/g, '\\$1');
+  return result;
+}
+
+function reFlag(arr, str, flag) {
+  for (var i = 0, iLength = arr.length; i < iLength; i++) {
+    var iItem = arr[i],
+        iItemFix = fixRe(iItem),
+        re = new RegExp(iItemFix, 'g'),
+        reText = flag + i;
+
+    str = str.replace(re, reText);
+  }
 
   return str;
 }
 
-function showErrors(arr, errorTags, modal) {
-  var str = arr,
-      bug = errorTags,
-      bugVarRe = bug[0],
-      bugVarArr = str.search(bugVarRe);
-      bugLength = bug.length,
-      bags = [],
-      fixBugsArr = [];
+function reTagShow(str) {
+  str = str.replace(/</g, '&lt;'),
+  str = str.replace(/>/g, '&gt;');
+  return str;
+}
 
-  
-  console.log(bugVarArr);
+function replaceShowStr(str, arr, flag) {
+  for (var i = 0, iLength = arr.length; i < iLength; i++) {
+    var iItem = arr[i],
+        iItem = reTagShow(iItem),
+        iItemStr = '<span class="message">' + iItem + '</span>',
+        iReStr = flag + i + '\\b',
+        iRe = new RegExp(iReStr, 'g');
 
-  // for (var i = 0, iLength = bugLength; i < iLength; i++) {
-  //   var item = bug[i],
-  //       reResult = str.match(item);
-
-  //   bags.push.apply(bags, reResult);
-  // };
-
-  // if (bags.length != 0) {
-  //   bags = unique(bags);
-  //   // str = str.replace(/</g, '&lt;'),
-  //   // str = str.replace(/>/g, '&gt;');
-
-  //   console.log(str);
-
-  //   // for (var j = 0, jLength = bags.length; j < jLength; j++) {
-  //   //   var jItem = bags[j];
-
-  //   //   jItem = jItem.replace(/</g, '&lt;');
-  //   //   jItem = jItem.replace(/>/g, '&gt;');
-
-  //   //   var reIn = '<span class="message">' + jItem + '</span>',
-  //   //       reJitem = jItem.replace(/(\.|\^|\$|\*|\+|\?|\||\\|\(|\)|\[|\]|\{|\})/g, '\\$1'),
-  //   //       regJitem = new RegExp(reJitem, 'gmi');
-
-  //   //   str = str.replace(regJitem, reIn);
-  //   // }
-
-  //   $(modal)
-  //     .html('<pre>' + str + '</pre>');
-
-  //   // Initialization fancyBox
-  //   $.fancybox.open({
-  //     href: modal,
-  //     padding: false
-  //   });
-  // }
+    str = str.replace(iRe, iItemStr);
+  };
+  return str;
 }

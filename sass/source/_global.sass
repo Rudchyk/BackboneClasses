@@ -16,11 +16,16 @@ $icons: sprite-map("icons/*.png", $spacing: $spacingDefault)
 
 body
   @extend %relative
+  overflow: hidden
   background-color: #FFF
   +shFont($baseFontSize, $baseFontFamily, 1, $baseFontColor)
 
+.wrap
+  @include pos("f", 0, 0, 0, 0, 10)
+
 .section
-  @include pos("f", 0, false, false, false, 10)
+  @include pos("a", 0, false, false, false, 10)
+  overflow: auto
   width: 50%
   height: 100%
   padding: $sectionPadding
@@ -130,6 +135,8 @@ $tooltipArrowHeight: 5px
 
 .modal
   padding: 50px
+  width: 1200px
+  max-height: 700px
 
 .message
   color: #F04F37

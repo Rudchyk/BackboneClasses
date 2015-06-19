@@ -13,78 +13,80 @@
   <script data-headjs-load="js/init.js" src="js/min/head.min.js"></script>
 </head>
 <body>
-  <form role="section" class="section section-form section-form-js">
-    <div class="settings-panel left">
-      <div class="filters filters-js">
-        <div class="filter-bl">
-          <h2 class="filter-title"><i class="fa fa-cogs"></i> Stylesheet Language</h2>
-          <ul class="filter-list stylesheet_language-list">
-            <li class="filter-item stylesheet_language-item active">
-              <label class="filter-label stylesheet_language-label">
-                <input class="filter-el stylesheet_language-radio stylesheet_language-radio-js filter-el-js" type="radio" name="stylesheet_language" value="CSS/SCSS" checked="checked">
-                CSS/SCSS
-              </label>
-            </li>
-            <li class="filter-item stylesheet_language-item <isif>">
-              <label class="filter-label stylesheet_language-label">
-                <input class="filter-el stylesheet_language-radio stylesheet_language-radio-js filter-el-js" type="radio" name="stylesheet_language" value="SASS">
-                SASS
-              </label>
-            </li>
-          </ul>
+  <div class="wrap">
+    <form role="section" class="section section-form section-form-js">
+      <div class="settings-panel left">
+        <div class="filters filters-js">
+          <div class="filter-bl">
+            <h2 class="filter-title"><i class="fa fa-cogs"></i> Stylesheet Language</h2>
+            <ul class="filter-list stylesheet_language-list">
+              <li class="filter-item stylesheet_language-item active">
+                <label class="filter-label stylesheet_language-label">
+                  <input class="filter-el stylesheet_language-radio stylesheet_language-radio-js filter-el-js" type="radio" name="stylesheet_language" value="CSS/SCSS" checked="checked">
+                  CSS/SCSS
+                </label>
+              </li>
+              <li class="filter-item stylesheet_language-item <isif>">
+                <label class="filter-label stylesheet_language-label">
+                  <input class="filter-el stylesheet_language-radio stylesheet_language-radio-js filter-el-js" type="radio" name="stylesheet_language" value="SASS">
+                  SASS
+                </label>
+              </li>
+            </ul>
+          </div>
+          <div class="filter-bl">
+            <h2 class="filter-title"><i class="fa fa-cogs"></i> Sort by</h2>
+            <ul class="filter-list sort-list">
+              <li class="filter-item sort-item">
+                <label class="filter-label sort-label">
+                  <input type="checkbox" name="alphabetic" value="true" class="filter-el sort-checked sort-checked-js filter-el-js">
+                  Alphabetic sorting
+                </label>
+              </li>
+              <li class="filter-item sort-item active">
+                <label class="filter-label sort-label">
+                  <input type="checkbox" name="jsclass" value="true" class="filter-el sort-checked sort-checked-js filter-el-js" checked="checked">
+                  Without *-js classes
+                </label>
+              </li>
+              <li class="filter-item sort-item active">
+                <label class="filter-label sort-label">
+                  <input type="checkbox" name="standartclass" value="true" class="filter-el sort-checked sort-checked-js filter-el-js" checked="checked">
+                  Without standart classes
+                  <span class="help bl-has-tooltip">
+                    <i class="fa fa-question-circle"></i>
+                    <span class="tooltip tooltip-js">
+                      <input type="hidden" name="standartclasses" class="standartclasses-js" value="active, current, first, second, third, last, default, row, left, right, clearfix, hide, js">
+                    </span>
+                  </span>
+                </label>
+              </li>
+              <li class="filter-item sort-item active">
+                <label class="filter-label sort-label">
+                  <input type="checkbox" name="fontawesomeclasses" value="true" class="filter-el sort-checked sort-checked-js filter-el-js" checked="checked">
+                  Without <a href="http://fortawesome.github.io/Font-Awesome/examples/" title="Font Awesome" target="_blank">Font Awesome</a> classes
+                  <span class="help bl-has-tooltip">
+                    <i class="fa fa-question-circle"></i>
+                    <span class="tooltip tooltip-js">
+                      fa, fa-*
+                    </span>
+                  </span>
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="filter-bl">
-          <h2 class="filter-title"><i class="fa fa-cogs"></i> Sort by</h2>
-          <ul class="filter-list sort-list">
-            <li class="filter-item sort-item">
-              <label class="filter-label sort-label">
-                <input type="checkbox" name="alphabetic" value="true" class="filter-el sort-checked sort-checked-js filter-el-js">
-                Alphabetic sorting
-              </label>
-            </li>
-            <li class="filter-item sort-item active">
-              <label class="filter-label sort-label">
-                <input type="checkbox" name="jsclass" value="true" class="filter-el sort-checked sort-checked-js filter-el-js" checked="checked">
-                Without *-js classes
-              </label>
-            </li>
-            <li class="filter-item sort-item active">
-              <label class="filter-label sort-label">
-                <input type="checkbox" name="standartclass" value="true" class="filter-el sort-checked sort-checked-js filter-el-js" checked="checked">
-                Without standart classes
-                <span class="help bl-has-tooltip">
-                  <i class="fa fa-question-circle"></i>
-                  <span class="tooltip tooltip-js">
-                    <input type="hidden" name="standartclasses" class="standartclasses-js" value="active, current, first, second, third, last, default, row, left, right, clearfix, hide, js">
-                  </span>
-                </span>
-              </label>
-            </li>
-            <li class="filter-item sort-item active">
-              <label class="filter-label sort-label">
-                <input type="checkbox" name="fontawesomeclasses" value="true" class="filter-el sort-checked sort-checked-js filter-el-js" checked="checked">
-                Without <a href="http://fortawesome.github.io/Font-Awesome/examples/" title="Font Awesome" target="_blank">Font Awesome</a> classes
-                <span class="help bl-has-tooltip">
-                  <i class="fa fa-question-circle"></i>
-                  <span class="tooltip tooltip-js">
-                    fa, fa-*
-                  </span>
-                </span>
-              </label>
-            </li>
-          </ul>
+        <div class="button-panel-btns clearfix">
+          <button class="btn btn-bl btn-parse-js"><i class="fa fa-bug"></i> Parse</button>
+          <div class="btn btn-bl btn-fake btn-clear btn-clear-js hide"><i class="fa fa-times"></i> Clear</div>
         </div>
       </div>
-      <div class="button-panel-btns clearfix">
-        <button class="btn btn-bl btn-parse-js"><i class="fa fa-bug"></i> Parse</button>
-        <div class="btn btn-bl btn-fake btn-clear btn-clear-js hide"><i class="fa fa-times"></i> Clear</div>
+      <div class="area-panel right">
+        <textarea name="area" class="field area area-js"></textarea>
       </div>
-    </div>
-    <div class="area-panel right">
-      <textarea name="area" class="field area area-js"></textarea>
-    </div>
-  </form><!--end area-->
-  <section role="section" class="section section-content section-content-js"></section><!--end content-->
+    </form><!--end area-->
+    <section role="section" class="section section-content section-content-js"></section><!--end content-->
+  </div>
   <section role="section" class="hide section-cod-js"></section><!--end content--><!--modal-->
   <div role="alertdialog" id="modal" class="modal"></div>
 </body>
