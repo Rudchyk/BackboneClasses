@@ -348,7 +348,8 @@ $.fn.serializeObject = function()
 function fixString(arr, errorTags) {
   var str = arr,
       bug = errorTags,
-      bugLength = bug.length;
+      bugLength = bug.length,
+      reScript = /<script.*?>([\s\S]*?)<\/script>/gmi;
 
   for (var i = 0, iLength = bugLength; i < iLength; i++) {
     var item = bug[i];
@@ -356,10 +357,14 @@ function fixString(arr, errorTags) {
     str = str.replace(item, '');
   };
 
+  str = str.replace(reScript, '');
+
   return str;
 }
 
 function showErrors(str, errorTags, modal) {
+  var error = false;
+
   for (var err = 0, errLength = errorTags.length; err < errLength; err++) {
     var errItem = errorTags[err];
 
