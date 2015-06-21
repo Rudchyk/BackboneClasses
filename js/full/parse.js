@@ -296,34 +296,34 @@ function sortByNested(arr) {
   for (var i = 0; i < arrSort.length; i++) {
     var $item = arrSort[i];
 
-    if (str != '') {
+    if (!isBlank(str)) {
       if (myRe.test($item)) {
         var $itemArr = $item.split('-'),
-            $itemArrHead = $itemArr[0],
-            re = new RegExp('\\s(?=((' + $itemArrHead + ')\\-?([a-z0-9+-]+)?)(?=\\s))', 'g'),
-            str = str.replace(re, ' UNIK-'),
-            re2 = new RegExp('(UNIK)-([a-z0-9+_+-]+)', 'g'),
+            $itemMain = $itemArr[0];
+      } else {
+        var $itemMain = $item;
+      }
+
+      var re = new RegExp('\\s(?=((' + $itemMain + ')\\-?([a-z0-9+-]+)?)(?=\\s))', 'g');
+
+      if (re.test(str)) {
+        var str = str.replace(re, ' UNIK-'),
+            re2 = new RegExp('UNIK-([a-z0-9+_+-]+)', 'g'),
             resulrRe = str.match(re2),
             resulrReFix = [];
 
-        if (resulrRe) {
-          for (var j = 0, jLength = resulrRe.length; j < jLength; j++) {
-            var jItem = resulrRe[j];
-            jItem = jItem.replace(/UNIK-/, '');
-            resulrReFix.push(jItem);
-          }
+        for (var j = 0, jLength = resulrRe.length; j < jLength; j++) {
+          var jItem = resulrRe[j];
+          jItem = jItem.replace(/UNIK-/, '');
+          resulrReFix.push(jItem);
+        }
 
-          resulrReFix = BubbleSort(resulrReFix);
-          result.push.apply(result, resulrReFix);
-        };
-
+        resulrReFix = BubbleSort(resulrReFix);
+        result.push.apply(result, resulrReFix);
         str = str.replace(re2, ' ');
-      } else {
-        result.push($item);
       }
     }
   }
-  result = unique(result);
 
   return result;
 }
@@ -354,7 +354,7 @@ function fixString(arr, errorTags) {
   for (var i = 0, iLength = bugLength; i < iLength; i++) {
     var item = bug[i];
 
-    str = str.replace(item, '');
+    str = str.replace(item, ' ');
   };
 
   str = str.replace(reScript, '');
@@ -408,7 +408,8 @@ function showErrors(str, errorTags, modal) {
     }
 
     $(modal)
-      .html('<pre>' + str + '</pre>');
+      .html('<pre>' + str + '</pre>')
+      .prepend('<h2 class="title">Your code has some specific tags:</h2>');
 
     $.fancybox.open({
       href: modal,
@@ -427,7 +428,7 @@ function reFlag(arr, str, flag) {
   for (var i = 0, iLength = arr.length; i < iLength; i++) {
     var iItem = arr[i],
         iItemFix = fixRe(iItem),
-        re = new RegExp(iItemFix, 'g'),
+        re = new RegExp(iItemFix),
         reText = flag + i;
 
     str = str.replace(re, reText);
@@ -447,10 +448,14 @@ function replaceShowStr(str, arr, flag) {
     var iItem = arr[i],
         iItem = reTagShow(iItem),
         iItemStr = '<span class="message">' + iItem + '</span>',
-        iReStr = flag + i + '\\b',
-        iRe = new RegExp(iReStr, 'g');
+        iReStr = flag + i,
+        iRe = new RegExp(iReStr);
 
     str = str.replace(iRe, iItemStr);
   };
   return str;
+}
+
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
 }
