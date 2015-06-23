@@ -63,41 +63,43 @@ $(document).ready(function() {
           $htmlNoErrorTags = fixString($html, errorTgs);
 
       if ($html) {
+        if (/<.*?>/.test($html)) {
+          showErrors($html, errorTgs, $modal);
 
-        showErrors($html, errorTgs, $modal);
+          $formEl
+            .attr('disabled', 'disabled')
+            .parent()
+            .addClass('has-disabled');
 
-        $formEl
-          .attr('disabled', 'disabled')
-          .parent()
-          .addClass('has-disabled');
+          $btnParse
+            .attr('disabled', 'disabled');
 
-        $btnParse
-          .attr('disabled', 'disabled');
+          $btnClear
+            .show();
 
-        $btnClear
-          .show();
+          $cod
+            .html($htmlNoErrorTags);
 
-        $cod
-          .html($htmlNoErrorTags);
+          var $mainData = parseHTML($cod),
+              $uniqueArr = sortByNested($mainData);
 
-        var $mainData = parseHTML($cod),
-            $uniqueArr = sortByNested($mainData);
+          if ($alphabetic) {
+            $uniqueArr = BubbleSort($uniqueArr);
+          }
+          if ($jsclass) {
+            $uniqueArr = nojsClass($uniqueArr);
+          }
+          if ($standartclass) {
+            $uniqueArr = standartclassFn($uniqueArr, $standartclasses);
+          }
+          if ($fontawesomeclasses) {
+            $uniqueArr = fontawesomeclassesFn($uniqueArr);
+          }
 
-        if ($alphabetic) {
-          $uniqueArr = BubbleSort($uniqueArr);
+          showBackboneClasses($uniqueArr, $content, $stylesheet_language);
+        } else {
+          alert("Your code doesn't have HTML tags!");
         }
-        if ($jsclass) {
-          $uniqueArr = nojsClass($uniqueArr);
-        }
-        if ($standartclass) {
-          $uniqueArr = standartclassFn($uniqueArr, $standartclasses);
-        }
-        if ($fontawesomeclasses) {
-          $uniqueArr = fontawesomeclassesFn($uniqueArr);
-        }
-
-        showBackboneClasses($uniqueArr, $content, $stylesheet_language);
-
       } else {
         $area
           .addClass('has-error');
@@ -163,14 +165,15 @@ function parseHTML(bloc) {
         $thisClass = $this.attr('class'),
         $thisClassHasSpace = myRe.test($thisClass);
 
-      // Перевіряємо на наявнісь декількох класів у елемента
-      if($thisClassHasSpace) { // Якщо їх декілька виконуємо дію
-        var $thisClassArr = $thisClass.split(' '); // Створюємо з них массив по пробілу
+    // Перевіряємо на наявнісь декількох класів у елемента
+    if($thisClassHasSpace) { // Якщо їх декілька виконуємо дію
+      var $thisClassArr = $thisClass.split(' '); // Створюємо з них массив по пробілу
 
-        arr.push.apply(arr, $thisClassArr); // Добавляємо в наш глобальний массив
-      } else {
-        arr.push($thisClass); // Якщо один то відразу добавляємо в масив
-      }
+      arr.push.apply(arr, $thisClassArr); // Добавляємо в наш глобальний массив
+    } else {
+      arr.push($thisClass); // Якщо один то відразу добавляємо в масив
+    }
+
   });
 
   arr = deleteEmptyEl(arr);
