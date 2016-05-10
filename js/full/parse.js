@@ -15,8 +15,6 @@ $(document).ready(function() {
       $formEl = $('.filter-el-js'),
       $modal = '#modal';
 
-      // /(<\/?is(?:if|else|elseif)\s?(?:[a-z\d\s]+?)?\/?>)/gmi
-
   $filters
     .on('change', $filtersRadio, function() {
       $(this)
@@ -193,7 +191,7 @@ function showBackboneClasses(arr, blocShow, stylesheet_language) {
     if (stylesheet_language == 'SASS') {
       styleClassItem = '.' + styleClass + '<br>';
     } else {
-      styleClassItem = '.' + styleClass + '{}<br>';
+      styleClassItem = '.' + styleClass + ' {}<br>';
     }
 
     blocShow
@@ -307,11 +305,11 @@ function sortByNested(arr) {
         var $itemMain = $item;
       }
 
-      var re = new RegExp('\\s(?=((' + $itemMain + ')\\-?([a-z0-9+-]+)?)(?=\\s))', 'g');
+      var re = new RegExp('\\s(?=((' + $itemMain + ')\\-?([a-zA-Z0-9+-]+)?)(?=\\s))', 'g');
 
       if (re.test(str)) {
         var str = str.replace(re, ' UNIK-'),
-            re2 = new RegExp('UNIK-([a-z0-9+_+-]+)', 'g'),
+            re2 = new RegExp('UNIK-([a-zA-Z0-9+_+-]+)', 'g'),
             resulrRe = str.match(re2),
             resulrReFix = [];
 
